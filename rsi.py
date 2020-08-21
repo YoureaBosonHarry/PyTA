@@ -13,18 +13,6 @@ current_day = datetime.datetime.now().day
 two_years_from_today = datetime.datetime(current_year - 2, current_month, current_day)
 today = datetime.datetime.now().date().isoformat()
 
-def get_dataframe_by_ticker(ticker, start_time, end_time):
-    connected = False
-    try:
-        ticker_df = web.get_data_yahoo(ticker, start=start_time, end=end_time)
-        print(f"Retrieved data for {ticker}")
-        return ticker_df.reset_index()
-    except:
-        print(f"Failed to retrieve data for {ticker}")
-        time.sleep(5)
-        return None
-    
-
 def compute_rsi(data, time_window):
     diff = data.diff(1).dropna()
     up_change = 0 * diff
@@ -66,7 +54,3 @@ def get_rsi_plot(ticker, start=two_years_from_today, end=today, time_window=14):
     ax2.axhline(100, linestyle='--', alpha=0.1)
     #plt.savefig(f'{ticker}_RSI.png')
     plt.show()
-
-if __name__ == '__main__':
-    scan_markets()
-#get_rsi_plot("TXG")
