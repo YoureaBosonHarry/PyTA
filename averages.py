@@ -51,7 +51,3 @@ def check_for_cross(ticker, windows={"short": 20, "long": 50}):
     data = stock_data.get_dataframe_by_ticker(ticker)
     short_term_mean = data['Adj Close'].rolling(window=windows['short']).mean()
     long_term_mean = data['Adj Close'].rolling(window=windows['long']).mean()
-
-
-if __name__ == '__main__':
-    sma("SLV", bollinger=True)
