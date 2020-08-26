@@ -54,5 +54,5 @@ def get_rsi_plot(ticker, start=two_years_from_today, end=today, time_window=14):
     ax2.axhline(100, linestyle='--', alpha=0.1)
     #plt.savefig(f'{ticker}_RSI.png')
     plt.show()
-
-get_rsi_plot("BMRN")
+if __name__ == '__main__':
+    get_rsi_plot("BMRN")
