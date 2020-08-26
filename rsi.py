@@ -55,4 +55,5 @@ def get_rsi_plot(ticker, start=two_years_from_today, end=today, time_window=14):
     #plt.savefig(f'{ticker}_RSI.png')
     plt.show()
 
-get_rsi_plot("BMRN")
+if __name__ == '__main__':
+    get_rsi_plot("SPY")
