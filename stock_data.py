@@ -19,3 +19,4 @@ def get_dataframe_by_ticker(ticker, start_time=two_years_from_today, end_time=to
         time.sleep(5)
         return None
 
+
