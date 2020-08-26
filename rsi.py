@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import markets
 import numpy as np
 import pandas as pd
-import pandas_datareader.data as web
 import stock_data
 import time
 
@@ -56,4 +55,4 @@ def get_rsi_plot(ticker, start=two_years_from_today, end=today, time_window=14):
     #plt.savefig(f'{ticker}_RSI.png')
     plt.show()
 
-get_rsi_plot("SLV")
+get_rsi_plot("BMRN")

@@ -51,3 +51,18 @@ def check_for_cross(ticker, windows={"short": 20, "long": 50}):
     data = stock_data.get_dataframe_by_ticker(ticker)
     short_term_mean = data['Adj Close'].rolling(window=windows['short']).mean()
     long_term_mean = data['Adj Close'].rolling(window=windows['long']).mean()
+
+def get_intersection(data, windows=[20, 50]):
+    data[f'{windows[0]} SMA'] = data['Adj Close'].rolling(window=windows[0]).mean()
+    data[f'{windows[1]} SMA'] = data['Adj Close'].rolling(window=windows[1]).mean()
+    for i in range(len(data['Date'][-20:])):
+        if len(data['Date'][:]) - 19 + i < len(data['Date'][:]):
+            y11 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - 20 + i]
+            y21 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - 20 + i]
+            y12 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - 19 + i]
+            y22 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - 19 + i]
+            if y11 > y21 and y12 < y22:
+                print(data['Date'][len(data['Date'][:]) - 20 + i], data['Date'][len(data['Date'][:]) - 19 + i])
+            if y21 < y11 and y22 > y12:
+                print("CROSS")
+
