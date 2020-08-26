@@ -47,22 +47,20 @@ def bollinger_bands(data, window=20):
     data['Lower Bollinger'] = moving_average - (2 * std)
     return data
 
-def check_for_cross(ticker, windows={"short": 20, "long": 50}):
-    data = stock_data.get_dataframe_by_ticker(ticker)
-    short_term_mean = data['Adj Close'].rolling(window=windows['short']).mean()
-    long_term_mean = data['Adj Close'].rolling(window=windows['long']).mean()
-
-def get_intersection(data, windows=[20, 50]):
+def get_intersection(ticker, windows=[20, 50]):
+    data = stock_data.get_dataframe_by_ticker(ticker)[-2*(max(windows)):]
     data[f'{windows[0]} SMA'] = data['Adj Close'].rolling(window=windows[0]).mean()
     data[f'{windows[1]} SMA'] = data['Adj Close'].rolling(window=windows[1]).mean()
-    for i in range(len(data['Date'][-20:])):
-        if len(data['Date'][:]) - 19 + i < len(data['Date'][:]):
-            y11 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - 20 + i]
-            y21 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - 20 + i]
-            y12 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - 19 + i]
-            y22 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - 19 + i]
+    intersections = {}
+    for i in range(len(data['Date'][-min(windows):])):
+        if len(data['Date'][:]) - min(windows) + 1 + i < len(data['Date'][:]):
+            y11 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - min(windows) + i] # short window n day price
+            y21 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - min(windows) + i] # long window n day price
+            y12 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - min(windows) + 1 + i] # short window n + 1 price
+            y22 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - min(windows) + 1 + i] # long window n + 1 price
             if y11 > y21 and y12 < y22:
-                print(data['Date'][len(data['Date'][:]) - 20 + i], data['Date'][len(data['Date'][:]) - 19 + i])
-            if y21 < y11 and y22 > y12:
-                print("CROSS")
+                intersections[data['Date'][len(data['Date'][:]) - min(windows) + 1 + i]] = "Bearish"
+            if y21 > y11 and y22 < y12:
+                intersections[data['Date'][len(data['Date'][:]) - min(windows) + 1 + i]] = "Bullish"
+    return intersections
 
