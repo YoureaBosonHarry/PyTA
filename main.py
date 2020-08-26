@@ -37,5 +37,14 @@ def write_data_to_csv(ticker, data, indicator_name, path):
         write = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow([f'{ticker}', f'{data}'])
 
+def scheduler():
+    market_close = datetime.datetime.now().replace(hour=20, minute=0, second=0)
+    close_delta = (datetime.datetime.utcnow() - market_close)
+    indicators_pulled_today = False
+    while close_delta.seconds > 0 and close_delta < 600 and indicators_pulled_today is False:
+        scan_markets()
+        indicators_pulled_today = True
+        print(f"Successfully Pulled Indicators For {today}")
+
 if __name__ == '__main__':
     scan_markets()
