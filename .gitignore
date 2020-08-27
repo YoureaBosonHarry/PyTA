@@ -342,3 +342,4 @@ healthchecksdb
 rsi/
 ema/
 sma/
+sma_intersection/

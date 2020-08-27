@@ -22,7 +22,7 @@ def rsi_of_interest(ticker, min_interest=30, max_interest=70):
     rsi_vals = data.tail()['RSI'].iloc[-1] if data is not None else 50
     rounded = np.round(rsi_vals , 2)
     if rounded > 70 or rounded < 30:
-        write_data_to_csv(i, rounded, "rsi", os.path.join(os.getcwd(), 'rsi'))
+        write_data_to_csv(ticker, rounded, "rsi", os.path.join(os.getcwd(), 'rsi'))
 
 def sma_intersections_of_interest(ticker, windows=[20, 50]):
     print(f"Checking Intersections for {ticker}...")
@@ -34,7 +34,7 @@ def write_data_to_csv(ticker, data, indicator_name, path):
     if not os.path.isdir(path):
         os.makedirs(path)
     with open(os.path.join(path, f'{indicator_name}_{today}.csv'), 'a+', newline='') as csvfile:
-        write = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         writer.writerow([f'{ticker}', f'{data}'])
 
 def scheduler():

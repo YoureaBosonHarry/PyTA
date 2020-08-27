@@ -47,20 +47,25 @@ def bollinger_bands(data, window=20):
     data['Lower Bollinger'] = moving_average - (2 * std)
     return data
 
-def get_intersection(ticker, windows=[20, 50]):
-    data = stock_data.get_dataframe_by_ticker(ticker)[-2*(max(windows)):]
+def get_intersection(ticker, windows=[20, 50], look_back_time=5):
+    data = stock_data.get_dataframe_by_ticker(ticker)
+    if data is None or len(data) < min(windows):
+        return None
     data[f'{windows[0]} SMA'] = data['Adj Close'].rolling(window=windows[0]).mean()
     data[f'{windows[1]} SMA'] = data['Adj Close'].rolling(window=windows[1]).mean()
     intersections = {}
-    for i in range(len(data['Date'][-min(windows):])):
-        if len(data['Date'][:]) - min(windows) + 1 + i < len(data['Date'][:]):
-            y11 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - min(windows) + i] # short window n day price
-            y21 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - min(windows) + i] # long window n day price
-            y12 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - min(windows) + 1 + i] # short window n + 1 price
-            y22 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - min(windows) + 1 + i] # long window n + 1 price
+    for i in range(len(data['Date'][-look_back_time:])):
+        print(data['Date'][len(data['Date'][:]) - look_back_time + i])
+        if len(data['Date'][:]) - look_back_time + 1 + i < len(data['Date'][:]):
+            y11 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - look_back_time + i] # short window n day price
+            y21 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - look_back_time + i] # long window n day price
+            y12 = data[f'{windows[0]} SMA'][len(data['Date'][:]) - look_back_time + 1 + i] # short window n + 1 price
+            y22 = data[f'{windows[1]} SMA'][len(data['Date'][:]) - look_back_time + 1 + i] # long window n + 1 price
             if y11 > y21 and y12 < y22:
-                intersections[data['Date'][len(data['Date'][:]) - min(windows) + 1 + i]] = "Bearish"
+                intersections[data['Date'][len(data['Date'][:]) - look_back_time + 1 + i]] = "Bearish"
             if y21 > y11 and y22 < y12:
-                intersections[data['Date'][len(data['Date'][:]) - min(windows) + 1 + i]] = "Bullish"
+                intersections[data['Date'][len(data['Date'][:]) - look_back_time + 1 + i]] = "Bullish"
     return intersections
 
+if __name__ == '__main__':
+    print(get_intersection("ZEN"))
