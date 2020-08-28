@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
    name='PyTA',
-   version='0.2.2',
+   version='0.3.0',
    description='A python module for technical analysis',
    author='Ben Rathbone',
    author_email='rath3.14159@protonmail.com',
