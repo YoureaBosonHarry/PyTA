@@ -21,21 +21,24 @@ def rsi_of_interest(ticker, min_interest=30, max_interest=70):
     data = rsi.get_rsi_dataframe(f"{ticker}")
     rsi_vals = data.tail()['RSI'].iloc[-1] if data is not None else 50
     rounded = np.round(rsi_vals , 2)
-    if rounded > 70 or rounded < 30:
-        write_data_to_csv(ticker, rounded, "rsi", os.path.join(os.getcwd(), 'rsi'))
+    if rounded > 70:
+        write_data_to_csv({"ticker": ticker, "rsi": rounded, "sentiment": "Overbought", "count": -1}, "rsi", os.path.join(os.getcwd(), 'rsi'))
+    elif rounded < 30:
+        write_data_to_csv({"ticker": ticker, "rsi": rounded, "sentiment": "Oversold", "count": 1}, "rsi", os.path.join(os.getcwd(), 'rsi'))
 
 def sma_intersections_of_interest(ticker, windows=[20, 50]):
     print(f"Checking Intersections for {ticker}...")
-    data = averages.get_intersection(ticker, windows=windows)
+    data = averages.get_sma_intersection(ticker, windows=windows)
     if data:
-        write_data_to_csv(ticker, data, "sma_intersection", os.path.join(os.getcwd(), 'sma_intersection'))
+        write_data_to_csv(data, "sma_intersection", os.path.join(os.getcwd(), 'sma_intersection'))
 
-def write_data_to_csv(ticker, data, indicator_name, path):
+def write_data_to_csv(data, indicator_name, path):
     if not os.path.isdir(path):
         os.makedirs(path)
+    csv_cols = data.keys()
     with open(os.path.join(path, f'{indicator_name}_{today}.csv'), 'a+', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow([f'{ticker}', f'{data}'])
+        writer.writerow(data.values())
 
 def scheduler():
     market_close = datetime.datetime.now().replace(hour=20, minute=0, second=0)
