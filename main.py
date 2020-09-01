@@ -4,6 +4,7 @@ import datetime
 import markets
 import numpy as np
 import os
+import pandas as pd
 import rsi
 import time
 
@@ -50,4 +51,4 @@ def scheduler():
         print(f"Successfully Pulled Indicators For {today}")
 
 if __name__ == '__main__':
-    scan_markets()
+    count_indicators()
