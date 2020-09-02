@@ -15,6 +15,7 @@ def scan_markets():
     for i in tickers:
         rsi_of_interest(i)
         sma_intersections_of_interest(i)
+        macd_intersections(i)
         time.sleep(2)
 
 def rsi_of_interest(ticker, min_interest=30, max_interest=70):
@@ -32,6 +33,12 @@ def sma_intersections_of_interest(ticker, windows=[20, 50]):
     data = averages.get_sma_intersection(ticker, windows=windows)
     if data:
         write_data_to_csv(data, "sma_intersection", os.path.join(os.getcwd(), 'sma_intersection'))
+
+def macd_intersections(ticker):
+    data = averages.get_macd_intersection(ticker)
+    if data:
+        print("writing")
+        write_data_to_csv(data, "macd_intersection", os.path.join(os.getcwd(), 'macd_intersection'))
 
 def write_data_to_csv(data, indicator_name, path):
     if not os.path.isdir(path):
@@ -51,4 +58,4 @@ def scheduler():
         print(f"Successfully Pulled Indicators For {today}")
 
 if __name__ == '__main__':
-    count_indicators()
+    scan_markets()

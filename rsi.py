@@ -17,13 +17,10 @@ def compute_rsi(data, time_window):
     diff = data.diff(1).dropna()
     up_change = 0 * diff
     down_change = 0 * diff
-
     up_change[diff > 0] = diff[diff > 0]
     down_change[diff < 0] = diff[diff < 0]
-
     up_change_average = up_change.ewm(com=time_window-1, min_periods=time_window).mean()
     down_change_average = down_change.ewm(com=time_window-1, min_periods=time_window).mean()
-
     rs = abs(up_change_average/down_change_average)
     rsi = 100 - 100/(1+rs)
     return rsi
@@ -55,4 +52,4 @@ def get_rsi_plot(ticker, start=two_years_from_today, end=today, time_window=14):
     #plt.savefig(f'{ticker}_RSI.png')
     plt.show()
 if __name__ == '__main__':
-    get_rsi_plot("INTC")
+    get_rsi_plot("DLTR")
