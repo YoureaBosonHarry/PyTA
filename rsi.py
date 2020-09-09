@@ -13,6 +13,17 @@ current_day = datetime.datetime.now().day
 two_years_from_today = datetime.datetime(current_year - 2, current_month, current_day)
 today = datetime.datetime.now().date().isoformat()
 
+def threshold_rsi(ticker, min_interest=30, max_interest=70):
+    data = get_rsi_dataframe(f"{ticker}")
+    rsi_vals = data.tail()['RSI'].iloc[-1] if data is not None else 50
+    rounded = np.round(rsi_vals , 2)
+    if rounded >= max_interest:
+        return {"ticker": ticker, "rsi": rounded, "sentiment": "Overbought", "count": -1}
+    elif rounded <= min_interest:
+        {"ticker": ticker, "rsi": rounded, "sentiment": "Oversold", "count": 1}
+    else:
+        return None
+
 def compute_rsi(data, time_window):
     diff = data.diff(1).dropna()
     up_change = 0 * diff

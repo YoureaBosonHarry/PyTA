@@ -22,13 +22,9 @@ def scan_markets():
 
 def rsi_of_interest(ticker, min_interest=30, max_interest=70):
     print(f"Calculating RSI For {ticker}...")
-    data = rsi.get_rsi_dataframe(f"{ticker}")
-    rsi_vals = data.tail()['RSI'].iloc[-1] if data is not None else 50
-    rounded = np.round(rsi_vals , 2)
-    if rounded > 70:
-        write_data_to_csv({"ticker": ticker, "rsi": rounded, "sentiment": "Overbought", "count": -1}, "rsi", os.path.join(os.getcwd(), 'rsi'))
-    elif rounded < 30:
-        write_data_to_csv({"ticker": ticker, "rsi": rounded, "sentiment": "Oversold", "count": 1}, "rsi", os.path.join(os.getcwd(), 'rsi'))
+    data = rsi.threshold_rsi(ticker, min_interest=min_interest, max_interest=max_interest)
+    if data:
+        write_data_to_csv(data, "rsi", os.path.join(os.getcwd(), 'rsi'))
 
 def sma_intersections_of_interest(ticker, windows=[20, 50]):
     print(f"Checking Intersections for {ticker}...")
