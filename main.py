@@ -67,7 +67,6 @@ def threshold_sentiment(min_thresh, max_thresh):
     sentiment_dict = count_sentiment()
     keys = list(sentiment_dict.keys())
     for i in keys[:]:
-        print(i, sentiment_dict[i])
         if sentiment_dict[i] < max_thresh or sentiment_dict[i] > min_thresh:
             sentiment_dict.pop(i, None)
     return sentiment_dict
@@ -89,4 +88,4 @@ def scheduler():
         print(f"Successfully Pulled Indicators For {today}")
 
 if __name__ == '__main__':
-    print(threshold_sentiment(-2, 2))
+    scan_markets()
