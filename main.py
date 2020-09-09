@@ -19,6 +19,7 @@ def scan_markets():
         sma_intersections_of_interest(i)
         macd_intersections(i)
         time.sleep(2)
+    record_sentiment()
 
 def rsi_of_interest(ticker, min_interest=30, max_interest=70):
     print(f"Calculating RSI For {ticker}...")
@@ -36,6 +37,11 @@ def macd_intersections(ticker):
     data = averages.get_macd_intersection(ticker)
     if data:
         write_data_to_csv(data, "macd_intersection", os.path.join(os.getcwd(), 'macd_intersection'))
+
+def record_sentiment(min_threshold=-2, max_threshold=2):
+    data = threshold_sentiment(min_threshold, max_threshold)
+    if data:
+        write_data_to_csv(data, "sentiment", os.path.join(os.getcwd(), 'sentiment'))
 
 def write_data_to_csv(data, indicator_name, path):
     if not os.path.isdir(path):
@@ -59,7 +65,7 @@ def add_sentiment(rows, sentiment_dict):
             sentiment_dict[i[0]] += int(i[3])
     return sentiment_dict
 
-def threshold_sentiment(min_thresh, max_thresh):
+def threshold_sentiment(min_thresh=-2, max_thresh=2):
     sentiment_dict = count_sentiment()
     keys = list(sentiment_dict.keys())
     for i in keys[:]:
