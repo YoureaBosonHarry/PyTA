@@ -20,7 +20,7 @@ def threshold_rsi(ticker, min_interest=30, max_interest=70):
     if rounded >= max_interest:
         return {"ticker": ticker, "rsi": rounded, "sentiment": "Overbought", "count": -1}
     elif rounded <= min_interest:
-        {"ticker": ticker, "rsi": rounded, "sentiment": "Oversold", "count": 1}
+        return {"ticker": ticker, "rsi": rounded, "sentiment": "Oversold", "count": 1}
     else:
         return None
 
