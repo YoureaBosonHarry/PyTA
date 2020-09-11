@@ -14,11 +14,11 @@ indicators = ["rsi", "sma_intersection", "macd_intersection"]
 
 def scan_markets():
     tickers = markets.get_min_mkt_cap()
-    #for i in tickers:
-    #    rsi_of_interest(i)
-    #    sma_intersections_of_interest(i)
-    #    macd_intersections(i)
-    #    time.sleep(2)
+    for i in tickers:
+        rsi_of_interest(i)
+        sma_intersections_of_interest(i)
+        macd_intersections(i)
+        time.sleep(2)
     record_sentiment()
 
 def rsi_of_interest(ticker, min_interest=30, max_interest=70):
