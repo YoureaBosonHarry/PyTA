@@ -14,11 +14,11 @@ indicators = ["rsi", "sma_intersection", "macd_intersection"]
 
 def scan_markets():
     tickers = markets.get_min_mkt_cap()
-    for i in tickers:
-        rsi_of_interest(i)
-        sma_intersections_of_interest(i)
-        macd_intersections(i)
-        time.sleep(2)
+    #for i in tickers:
+    #    rsi_of_interest(i)
+    #    sma_intersections_of_interest(i)
+    #    macd_intersections(i)
+    #    time.sleep(2)
     record_sentiment()
 
 def rsi_of_interest(ticker, min_interest=30, max_interest=70):
@@ -41,7 +41,8 @@ def macd_intersections(ticker):
 def record_sentiment(min_threshold=-2, max_threshold=2):
     data = threshold_sentiment(min_threshold, max_threshold)
     if data:
-        write_data_to_csv(data, "sentiment", os.path.join(os.getcwd(), 'sentiment'))
+        for i in list(data.values()):
+            write_data_to_csv(i, "sentiment", os.path.join(os.getcwd(), 'sentiment'))
 
 def write_data_to_csv(data, indicator_name, path):
     if not os.path.isdir(path):
@@ -60,17 +61,18 @@ def read_csv(indicator_name):
 def add_sentiment(rows, sentiment_dict):
     for i in rows:
         if i[0] not in sentiment_dict:
-            sentiment_dict[i[0]] = int(i[3])
+            sentiment_dict[i[0]] = {"ticker": i[0], "count": int(i[3])}
         else:
-            sentiment_dict[i[0]] += int(i[3])
+            sentiment_dict[i[0]]["count"] += int(i[3])
     return sentiment_dict
 
 def threshold_sentiment(min_thresh=-2, max_thresh=2):
     sentiment_dict = count_sentiment()
+    formatted_dict = {}
     keys = list(sentiment_dict.keys())
     for i in keys[:]:
-        if sentiment_dict[i] < max_thresh or sentiment_dict[i] > min_thresh:
-            sentiment_dict.pop(i, None)
+        if sentiment_dict[i]["count"] < max_thresh and sentiment_dict[i]["count"] > min_thresh:
+            sentiment_dict.pop(i, None) 
     return sentiment_dict
 
 def count_sentiment():
