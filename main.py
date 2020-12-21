@@ -18,7 +18,7 @@ def scan_markets():
         rsi_of_interest(i)
         sma_intersections_of_interest(i)
         macd_intersections(i)
-        time.sleep(2)
+        time.sleep(0.5)
     record_sentiment()
 
 def rsi_of_interest(ticker, min_interest=30, max_interest=70):
